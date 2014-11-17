@@ -1,0 +1,33 @@
+﻿@using FitNotificaion2.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+}
+
+<div class="login-panel panel panel-primary" id="loginpartial" hidden>
+    <div class="panel-heading">
+        <h3 class="panel-title">Và 1 bước nữa thôi: Đăng nhập tài khoản facebook</h3>
+    </div>
+    <div class="panel-body">
+       
+            <fieldset>
+                <div class="form-group" style="left:50%;">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <button>Logout</button>
+                    }
+                    else
+                    {
+                        @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                    }
+
+                </div>
+                <!-- Change this to a button or input when using this as a form -->
+
+            </fieldset>
+
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,81 @@
+﻿@using FitNotificaion2.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="login-panel panel panel-primary" id="inputfbuserid">
+    <div class="panel-heading">
+        <h3 class="panel-title">Nhập Facebook User ID</h3>
+    </div>
+    <div class="panel-body">
+        <form role="form">
+            <fieldset>
+                <div class="form-group">
+                    <input class="form-control" placeholder="Facebook User ID" name="userid" type="text" id="useridtext" autofocus>
+                </div>
+                <!-- Change this to a button or input when using this as a form -->
+                <a class="btn btn-lg btn-success btn-block" onclick="DangKyUser()">Đăng ký</a>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<div class="login-panel panel panel-info" id="inputfbuserid">
+    <div class="panel-heading">
+        <h3 class="panel-title">Tip: Tìm Facebook User ID</h3>
+    </div>
+    <div class="panel-body">
+        <form role="form">
+            <fieldset>
+                <div class="form-group">
+                    Bạn có thể tìm thấy Facebook User ID bằng cách vào website sau: <a href="http://findmyfacebookid.com/">Facebook User ID</a>
+                </div>
+              
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-default" id="alertPanel" hidden>
+    <div class="panel-heading">
+        Alert Styles
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div class="alert alert-danger">
+            Chờ xíu nha, vì host Free nên hơi chậm. Chờ xíu thôi nha :)
+        </div>
+    </div>
+    <!-- .panel-body -->
+</div>
+
+<script>
+    function DangKyUser() {
+        $("#inputfbuserid").fadeOut(500, DangKyUser1());
+    }
+
+    function DangKyUser1()
+    {
+        $("#alertPanel").fadeIn(500, DangKyUser2());
+    }
+    function DangKyUser2() {        
+        
+        var id = $("#useridtext").val();
+        $.ajax({
+            type: 'GET', //Method type
+            url: '/Home/AddUser', //Your form processing file url
+            data: { userid: id },
+            success: function (data) {
+                $("#inputfbuserid").fadeOut(500, faceinLoginFB(data));
+            }
+        });
+    }
+
+    function faceinLoginFB(data) {
+        $("#content").html(data);
+        $("#loginpartial").fadeIn(500, null);
+    }
+
+</script>
+
