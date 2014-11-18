@@ -1,7 +1,7 @@
 create database FitNotificationDB
 
 go
-use FitNotificationDB
+use db077f9e9c579f44beb461a3e60105ebfb
 go
 
 select * from SystemLog

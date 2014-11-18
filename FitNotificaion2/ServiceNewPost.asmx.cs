@@ -31,7 +31,7 @@ namespace FitNotificaion2
         [ScriptMethod(UseHttpGet = true)]
         public string TimPostMoi()
         {
-            if ((DateTime.Now - _lastTimeUpdate).TotalMinutes < 5)
+            if ((DateTime.Now - _lastTimeUpdate).TotalHours < 2)
             {
                 return "FAIL because last time update < 15m: " + _lastTimeUpdate.ToString();
             }
