@@ -19,8 +19,10 @@ namespace FitNotificaion2.Controllers
             {
                 return RedirectToAction("DaDangNhap");
             }
-
-            return View();
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
 
         public ActionResult DaDangNhap()

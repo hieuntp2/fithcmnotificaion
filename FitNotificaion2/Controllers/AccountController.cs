@@ -123,8 +123,8 @@ namespace FitNotificaion2.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View("LoginPartial");
-            //return View();
+           // return View("LoginPartial");
+            return View();
         }
 
         private ApplicationSignInManager _signInManager;
