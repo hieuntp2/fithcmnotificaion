@@ -29,6 +29,16 @@ namespace FitNotificaion2.Controllers
         {
             return View();
         }
+
+        public ActionResult ChinhSachBaoMat()
+        {
+            return View();
+        }
+
+        public ActionResult DieuKhoan()
+        {
+            return View();
+        }
     }
 
 }

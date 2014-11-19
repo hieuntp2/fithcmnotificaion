@@ -350,6 +350,8 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\DaDangNhap.cshtml" />
+    <Content Include="Views\Home\ChinhSachBaoMat.cshtml" />
+    <Content Include="Views\Home\DieuKhoan.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
