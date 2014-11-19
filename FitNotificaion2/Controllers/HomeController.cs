@@ -19,6 +19,7 @@ namespace FitNotificaion2.Controllers
             {
                 return RedirectToAction("DaDangNhap");
             }
+
             return View();
         }
 
@@ -27,38 +28,36 @@ namespace FitNotificaion2.Controllers
             return View();
         }
 
-        [HttpPost]
-        public string addFBUser(string accesstoken)
-        {
-            // Add User to database
-            Unities uni = new Unities();
-            var facebookClient = new FacebookClient(accesstoken);
-            var me = facebookClient.Get("me") as JsonObject;
-            string uid = me["id"].ToString();
+        //[HttpPost]
+        //public string addFBUser(string accesstoken)
+        //{
+        //    // Add User to database
+        //    Unities uni = new Unities();
+        //    var facebookClient = new FacebookClient(accesstoken);
+        //    var me = facebookClient.Get("me") as JsonObject;
+        //    string uid = me["id"].ToString();
 
-            FBUser fbuser = db.FBUsers.SingleOrDefault(t => t.FBID == uid);
-            if (fbuser == null)
-            {
-                fbuser = new FBUser();
-                fbuser.FBID = uid;
-                db.FBUsers.Add(fbuser);
-                db.SaveChanges();
+        //    FBUser fbuser = db.FBUsers.SingleOrDefault(t => t.FBID == uid);
 
-                addAspNetUser(uid);
-                return "ADD";
-            }
+        //    addAspNetUser(uid);
+        //    if (fbuser == null)
+        //    {
 
-            return "ALR";
-        }
+        //        fbuser = new FBUser();
+        //        fbuser.FBID = uid;
+        //        db.FBUsers.Add(fbuser);
+        //        db.SaveChanges();
+        //        return "ADD";
+        //    }
 
-        private string addAspNetUser(string userid)
-        {
-            RegisterViewModel model = new RegisterViewModel();
-            model.Email = userid;
-            model.Password = "123";
-            AccountController controler = new AccountController();
-            return controler.createaAccount(model);
-        }
+        //    return "ALR";
+        //}
+
+        //private string addAspNetUser(string userid)
+        //{
+        //    AccountController controler = new AccountController();
+        //    return controler.createaAccount(userid,"123");
+        //}
 
     }
 
