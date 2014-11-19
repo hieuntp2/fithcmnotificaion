@@ -40,7 +40,7 @@ namespace FitNotificaion2
                 _lastTimeUpdate = DateTime.Now;
             }
             DeleteOldPost();
-
+            
             try
             {
                 List<NewPost> listpost = new List<NewPost>();
