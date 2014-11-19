@@ -1,4 +1,5 @@
 ﻿@using FitNotificaion2.Models
+@using Microsoft.AspNet.Identity
 @model LoginViewModel
 @{
     ViewBag.Title = "Log in";
@@ -10,19 +11,29 @@
     </div>
     <div class="panel-body">
 
-            <fieldset>
-                <div class="form-group" style="left:50%;">
-                    @if(User.Identity.IsAuthenticated)
+        <fieldset>
+            <div class="form-group" style="left:50%;">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
                     {
-                        <button>Logout</button>
+                        @Html.AntiForgeryToken()
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Manage", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        </ul>
                     }
-                    else
-                    {
-                        @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-                    }
-                   
-                </div>
-            </fieldset>
+                }
+                else
+                {
+                    @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                }
+
+            </div>
+        </fieldset>
 
     </div>
 </div>
