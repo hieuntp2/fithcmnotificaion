@@ -179,7 +179,7 @@ namespace FitNotificaion2.Controllers
                 var result = UserManager.Create(user, model.Password);
                 if (result.Succeeded)
                 {
-                    SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    //SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link

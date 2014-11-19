@@ -82,7 +82,7 @@ namespace FitNotificaion2
             {
                 Calllog("Lỗi khi tìm post " + e.ToString());
             }
-            Calllog("Tìm post thành công!");
+            Calllog("RUN SERVICE DONE!");
 
             return "OK";
         }
