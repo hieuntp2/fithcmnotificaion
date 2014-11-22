@@ -39,6 +39,11 @@ namespace FitNotificaion2.Controllers
         {
             return View();
         }
+
+        public ActionResult GioiThieu()
+        {
+            return View();            
+        }
     }
 
 }
