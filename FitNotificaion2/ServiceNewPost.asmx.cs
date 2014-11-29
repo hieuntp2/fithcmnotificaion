@@ -55,7 +55,6 @@ namespace FitNotificaion2
                     HtmlNode tagA_lable = node.ChildNodes[1].ChildNodes[5].ChildNodes[1];
                     item.TieuDe = tagA_lable.InnerText.Trim();
                     item.href = "http://www.fit.hcmus.edu.vn/vn/" + node.ChildNodes[1].ChildNodes[5].ChildNodes[1].Attributes["href"].Value;
-                    item.href = "";
                     int day = Int16.Parse(node.ChildNodes[1].ChildNodes[1].InnerText.Trim());
                     int year = Int16.Parse(node.ChildNodes[1].ChildNodes[3].InnerText.Trim());
                     int month = Int16.Parse(node.ChildNodes[3].ChildNodes[1].InnerText.Trim());
@@ -174,7 +173,6 @@ namespace FitNotificaion2
             {
                 nparams.template = "Fit.hcmus.edu.vn đăng " + posts.Count() + " bài mới!";
                 nparams.href = "";
-               
             }
 
             List<FBUser> users = db.FBUsers.ToList();
