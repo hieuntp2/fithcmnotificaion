@@ -54,7 +54,7 @@ namespace FitNotificaion2
 
                     HtmlNode tagA_lable = node.ChildNodes[1].ChildNodes[5].ChildNodes[1];
                     item.TieuDe = tagA_lable.InnerText.Trim();
-                    //item.href = "http://www.fit.hcmus.edu.vn/vn/" + node.ChildNodes[1].ChildNodes[5].ChildNodes[1].Attributes["href"].Value;
+                    item.href = "http://www.fit.hcmus.edu.vn/vn/" + node.ChildNodes[1].ChildNodes[5].ChildNodes[1].Attributes["href"].Value;
                     item.href = "";
                     int day = Int16.Parse(node.ChildNodes[1].ChildNodes[1].InnerText.Trim());
                     int year = Int16.Parse(node.ChildNodes[1].ChildNodes[3].InnerText.Trim());
@@ -168,7 +168,7 @@ namespace FitNotificaion2
             if (posts.Count() == 1)
             {
                 nparams.template = "Fit.hcmus.edu.vn đăng bài " + posts[0].TieuDe;
-                nparams.href = posts[0].href;
+                nparams.href = "";
             }
             else
             {
