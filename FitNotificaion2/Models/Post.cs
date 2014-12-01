@@ -16,6 +16,6 @@ namespace FitNotificaion2.Models
     {
         public string ID { get; set; }
         public string Tieude { get; set; }
-        public Nullable<System.DateTime> NgayTao { get; set; }
+        public DateTime NgayTao { get; set; }
     }
 }

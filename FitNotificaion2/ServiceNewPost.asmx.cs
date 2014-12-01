@@ -97,7 +97,8 @@ namespace FitNotificaion2
             {
                 for (int i = 0; i < list.Count; i++)
                 {
-                    if ((((DateTime.Now.Year - list[i].NgayTao.Value.Year) * 12) + _now.Month - list[i].NgayTao.Value.Month) >= 1)
+                   // if ((((DateTime.Now.Year - list[i].NgayTao.Value.Year) * 12) + _now.Month - list[i].NgayTao.Value.Month) >= 1)
+                    if((DateTime.Now - list[i].NgayTao).TotalDays > 30)
                     {
                         Calllog("Xóa post " + list[i].Tieude);
                         db.Posts.Remove(list[i]);
