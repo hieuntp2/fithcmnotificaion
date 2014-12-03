@@ -28,7 +28,7 @@ namespace FitNotificaion2.Controllers
         public ActionResult Baiviet()
         {
 
-            List<Post> posts = db.Posts.OrderBy(t => t.NgayTao).ToList();
+            List<Post> posts = db.Posts.OrderByDescending(t => t.NgayTao).ToList();
             return View(posts);
         }
 
