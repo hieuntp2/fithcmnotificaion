@@ -39,6 +39,8 @@ namespace FitNotificaion2
             {
                 _lastTimeUpdate = DateTime.Now;
             }
+
+            Calllog("RUN SERVICE at " + DateTime.Now.ToString());
             DeleteOldPost();
             
             try
@@ -82,7 +84,7 @@ namespace FitNotificaion2
             {
                 Calllog("Lỗi khi tìm post " + e.ToString());
             }
-            Calllog("RUN SERVICE DONE!");
+            Calllog("FINISH SERVICE DONE! at " + DateTime.Now.ToString());
 
             return "OK";
         }
