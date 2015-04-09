@@ -31,14 +31,14 @@ namespace FitNotificaion2
         [ScriptMethod(UseHttpGet = true)]
         public string TimPostMoi()
         {
-            //if ((DateTime.Now - _lastTimeUpdate).TotalHours < 2)
-            //{
-            //    return "FAIL because last time update < 15m: " + _lastTimeUpdate.ToString();
-            //}
-            //else
-            //{
-            //    _lastTimeUpdate = DateTime.Now;
-            //}
+            if ((DateTime.Now - _lastTimeUpdate).TotalHours < 24)
+            {
+                return "FAIL because last time update < 24h: " + _lastTimeUpdate.ToString();
+            }
+            else
+            {
+                _lastTimeUpdate = DateTime.Now;
+            }
 
             Calllog("RUN SERVICE at " + DateTime.Now.ToString());
             DeleteOldPost();
