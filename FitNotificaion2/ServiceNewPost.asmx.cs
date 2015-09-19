@@ -1,7 +1,10 @@
 ﻿using Facebook;
 using FitNotificaion2.Controllers;
+using FitNotificaion2.Controllers.Schedule;
 using FitNotificaion2.Models;
 using HtmlAgilityPack;
+using Quartz;
+using Quartz.Impl;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -14,7 +17,7 @@ namespace FitNotificaion2
     /// <summary>
     /// Summary description for ServiceNewPost
     /// </summary>
-    //[WebService(Namespace = "http://localhost:10768/ServiceNewPost/")]
+    //[WebService(Namespace = "http://myfitnotification.somee.com/ServiceNewPost/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
     // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
@@ -24,6 +27,7 @@ namespace FitNotificaion2
         FitNotificationDBEntities db = new FitNotificationDBEntities();
         FacebookClient client;
         Unities unit = new Unities();
+        static IScheduler scheduler;
 
         private static DateTime _lastTimeUpdate = new DateTime(2013, 01, 01);
 
@@ -31,9 +35,10 @@ namespace FitNotificaion2
         [ScriptMethod(UseHttpGet = true)]
         public string TimPostMoi()
         {
-            if ((DateTime.Now - _lastTimeUpdate).TotalHours < 24)
+            if ((DateTime.Now - _lastTimeUpdate).TotalHours < 23)
             {
-                return "FAIL because last time update < 24h: " + _lastTimeUpdate.ToString();
+                Calllog("FAIL because last time update < 23h: " + _lastTimeUpdate.ToString());
+                return "FAIL because last time update < 23h: " + _lastTimeUpdate.ToString();
             }
             else
             {
@@ -42,7 +47,7 @@ namespace FitNotificaion2
 
             Calllog("RUN SERVICE at " + DateTime.Now.ToString());
             DeleteOldPost();
-            
+
             try
             {
                 List<NewPost> listpost = new List<NewPost>();
@@ -99,8 +104,8 @@ namespace FitNotificaion2
             {
                 for (int i = 0; i < list.Count; i++)
                 {
-                   // if ((((DateTime.Now.Year - list[i].NgayTao.Value.Year) * 12) + _now.Month - list[i].NgayTao.Value.Month) >= 1)
-                    if((DateTime.Now - list[i].NgayTao).TotalDays > 30)
+                    // if ((((DateTime.Now.Year - list[i].NgayTao.Value.Year) * 12) + _now.Month - list[i].NgayTao.Value.Month) >= 1)
+                    if ((DateTime.Now - list[i].NgayTao).TotalDays > 30)
                     {
                         Calllog("Xóa post " + list[i].Tieude);
                         db.Posts.Remove(list[i]);
@@ -206,6 +211,72 @@ namespace FitNotificaion2
 
             db.SystemLogs.Add(log);
             db.SaveChanges();
+        }
+
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true)]
+        public string startservice(string password)
+        {
+            if (password != "HIEUYEUNGA")
+            {
+                return "FAIL";
+            }
+            try
+            {
+                // Nếu schedule == null, có nghĩa là chưa có thì khởi tạo, không thì trả ra là fail
+                if (scheduler == null)
+                {
+                    scheduler = StdSchedulerFactory.GetDefaultScheduler();
+
+                    // Start schedule service                
+                    scheduler.Start();
+
+                    IJobDetail job = JobBuilder.Create<ScheduleCallWebService>().Build();
+
+                    ITrigger trigger = TriggerBuilder.Create()
+                        .WithDailyTimeIntervalSchedule
+                          (s =>
+                             s.WithIntervalInHours(24)
+                              //s.WithIntervalInSeconds(5)
+                            .OnEveryDay()
+                            .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(0, 0))
+                          )
+                        .Build();
+
+                    scheduler.ScheduleJob(job, trigger);
+                    // end start schedule
+
+                    Calllog("Start Service done!");
+                    return "Start Service Done";
+                }
+                else
+                {
+                    Calllog("Service already RUN");
+                    return "Service already RUN";
+                }
+            }
+            catch
+            {
+                Calllog("Start Service FAIL!");
+                return "Start Service FAIL";
+            }
+        }
+
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true)]
+        public string stopsservice(string password)
+        {
+            if (password != "HIEUYEUNGA")
+            {
+                return "FAIL";
+            }
+
+            if(scheduler != null)
+            {
+                scheduler.Shutdown(true);
+            }
+            Calllog("Stop Service Done Service Done");
+            return "Stop Service Done Service Done";
         }
     }
 }
