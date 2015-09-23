@@ -177,6 +177,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MySystemLog.cs" />
     <Compile Include="Controllers\NewPost.cs" />
     <Compile Include="Controllers\Schedule\ScheduleCallWebService.cs" />
     <Compile Include="Controllers\Unities.cs" />

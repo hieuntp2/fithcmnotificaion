@@ -36,8 +36,8 @@ namespace FitNotificaion2
         public string TimPostMoi()
         {
             if ((DateTime.Now - _lastTimeUpdate).TotalHours < 23)
-            {
-                Calllog("FAIL because last time update < 23h: " + _lastTimeUpdate.ToString());
+            {                
+                MySystemLog.Calllog("FAIL because last time update < 23h: " + _lastTimeUpdate.ToString());
                 return "FAIL because last time update < 23h: " + _lastTimeUpdate.ToString();
             }
             else
@@ -45,7 +45,7 @@ namespace FitNotificaion2
                 _lastTimeUpdate = DateTime.Now;
             }
 
-            Calllog("RUN SERVICE at " + DateTime.Now.ToString());
+            MySystemLog.Calllog("RUN SERVICE at " + DateTime.Now.ToString());
             DeleteOldPost();
 
             try
@@ -87,9 +87,9 @@ namespace FitNotificaion2
             }
             catch (Exception e)
             {
-                Calllog("Lỗi khi tìm post " + e.ToString());
+                MySystemLog.Calllog("Lỗi khi tìm post " + e.ToString());
             }
-            Calllog("FINISH SERVICE DONE! at " + DateTime.Now.ToString());
+            MySystemLog.Calllog("FINISH SERVICE DONE! at " + DateTime.Now.ToString());
 
             return "OK";
         }
@@ -107,14 +107,14 @@ namespace FitNotificaion2
                     // if ((((DateTime.Now.Year - list[i].NgayTao.Value.Year) * 12) + _now.Month - list[i].NgayTao.Value.Month) >= 1)
                     if ((DateTime.Now - list[i].NgayTao).TotalDays > 30)
                     {
-                        Calllog("Xóa post " + list[i].Tieude);
+                        MySystemLog.Calllog("Xóa post " + list[i].Tieude);
                         db.Posts.Remove(list[i]);
                     }
                 }
             }
             catch (Exception e)
             {
-                Calllog("Lỗi khi xóa post " + e.ToString());
+                MySystemLog.Calllog("Lỗi khi xóa post " + e.ToString());
             }
 
             db.SaveChanges();
@@ -134,11 +134,11 @@ namespace FitNotificaion2
                 {
                     db.Posts.Add(checkitem);
                     db.SaveChanges();
-                    Calllog("Thêm post " + checkitem.Tieude);
+                    MySystemLog.Calllog("Thêm post " + checkitem.Tieude);
                 }
                 catch
                 {
-                    Calllog("Lỗi khi thêm Post " + checkitem.Tieude);
+                    MySystemLog.Calllog("Lỗi khi thêm Post " + checkitem.Tieude);
                 }
 
                 item.LaPostMoi = true;
@@ -193,7 +193,7 @@ namespace FitNotificaion2
                 }
                 catch
                 {
-                    Calllog("User " + user.FBID + " không send được notificaion!");
+                    MySystemLog.Calllog("User " + user.FBID + " không send được notificaion!");
                 }
                 finally
                 {
@@ -201,16 +201,6 @@ namespace FitNotificaion2
                 }
             }
 
-        }
-
-        private void Calllog(string message)
-        {
-            SystemLog log = new SystemLog();
-            log.DateCreate = DateTime.Now;
-            log.Detail = message;
-
-            db.SystemLogs.Add(log);
-            db.SaveChanges();
         }
 
         [WebMethod]
@@ -246,18 +236,61 @@ namespace FitNotificaion2
                     scheduler.ScheduleJob(job, trigger);
                     // end start schedule
 
-                    Calllog("Start Service done!");
+                    MySystemLog.Calllog("Start Service done!");
                     return "Start Service Done";
                 }
                 else
                 {
-                    Calllog("Service already RUN");
+                    MySystemLog.Calllog("Service already RUN");
                     return "Service already RUN";
                 }
             }
             catch
             {
-                Calllog("Start Service FAIL!");
+                MySystemLog.Calllog("Start Service FAIL!");
+                return "Start Service FAIL";
+            }
+        }
+
+        public static string startservice()
+        {
+            try
+            {
+                // Nếu schedule == null, có nghĩa là chưa có thì khởi tạo, không thì trả ra là fail
+                if (scheduler == null)
+                {
+                    scheduler = StdSchedulerFactory.GetDefaultScheduler();
+
+                    // Start schedule service                
+                    scheduler.Start();
+
+                    IJobDetail job = JobBuilder.Create<ScheduleCallWebService>().Build();
+
+                    ITrigger trigger = TriggerBuilder.Create()
+                        .WithDailyTimeIntervalSchedule
+                          (s =>
+                             s.WithIntervalInHours(24)
+                                 //s.WithIntervalInSeconds(5)
+                            .OnEveryDay()
+                            .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(0, 0))
+                          )
+                        .Build();
+
+                    scheduler.ScheduleJob(job, trigger);
+                    // end start schedule
+
+                    MySystemLog.Calllog("Start Service done!");
+                    return "Start Service Done";
+                }
+                else
+                {
+                    MySystemLog.Calllog("Service already RUN");
+                    return "Service already RUN";
+                }
+            }
+            catch
+            {
+                MySystemLog.Calllog("Start Service FAIL!");
                 return "Start Service FAIL";
             }
         }
@@ -275,7 +308,7 @@ namespace FitNotificaion2
             {
                 scheduler.Shutdown(true);
             }
-            Calllog("Stop Service Done Service Done");
+            MySystemLog.Calllog("Stop Service Done Service Done");
             return "Stop Service Done Service Done";
         }
     }
